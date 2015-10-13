@@ -7,112 +7,75 @@
  */
 
 import static org.junit.Assert.*;
-
+import java.util.Arrays;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
-
+@RunWith(value = Parameterized.class)
 public class ConverterTest
-{
+{ 
+    private String expression; //the expression to be evaluated
+    private String expected; //the expected result
+    
     /**
-     * Tests the infixToPostfix method using one character
+     * Constructor for use with @Parameters
+     * 
+     * @param expression infix expression to be evaluated
+     * @param expected postfix expression equivalent of expression
      */
-    @Test
-    public void testInfixToPostfixOneChar() 
+    public ConverterTest(String expression, String expected)
     {
-        assertEquals("a is expected to be a", "a", Converter.infixToPostfix("a"));
-    }
-
-    /**
-     * Tests the infixToPostfix method using one string of characters
-     */
-    @Test
-    public void testInfixToPostfixOneWord()
-    {
-        assertEquals("word is expected to be word", "word", Converter.infixToPostfix("word"));
+        this.expression = expression;
+        this.expected = expected;
     }
     
     /**
-     * Tests the infixToPostfix method using 0
+     * Sets the Parameters for testing the infix to postfix method
+     * 
+     * @return the expression and expected data
      */
-    @Test
-    public void testInfixToPostfixZero()
+    @Parameters(name = "Testing valid infix to postfix conversion")
+    public static Iterable<Object[]> data()
     {
-        assertEquals("0 is expected to be 0", "0", Converter.infixToPostfix("0"));
+        return Arrays.asList(new Object[][]{
+                {"a", "a"},
+                {"word", "word"},
+                {"0", "0"},
+                {"30.7", "30.7"},
+                {"a + b", "a b +"},
+                {"a - b", "a b -"},
+                {"a * b", "a b *"},
+                {"a / b", " a b /"},
+                {"a + b - c + d", "a b + c - d +"},
+                {"a * b / c / d", "a b * c / d /"},
+                {"a + b * c - d", " a b c * + d -"},
+                {"a * b / c - d", "a b * c d / -"},
+                {"( a )", "a"},
+                {"( a + b )", "a b +"},
+                {"( a ) + b", "a b +"},
+                {"a + ( b )", "a b +"},
+                {"( a ) + ( b )", " a b +"},
+                {"( ( a ) + ( b ) )", "a b +"},
+                {"a + ( b - c ) - d", "a b c - + d -"},
+                {"( a + b ) - c", " a b + c -"},
+                {"a * ( b / c ) / d", "a b c / * d /"},
+                {"( a * b ) / c", "a b * c /"},
+                {"a * ( b + c ) - d", "a b c + * d -"},
+                {"a * ( b - c ) * d", "a b c - * d *"},
+                {"a - ( b * c ) * d", "a b c * d * -"}
+        }
+        );
     }
 
     /**
-     * Tests the infixToPostfix method using one double
+     * Tests the infix to postfix method
      */
     @Test
-    public void testInfixToPostfixDouble()
+    public void testInfixToPostfix()
     {
-        assertEquals("1.2 is expected to be 1.2", "1.2", Converter.infixToPostfix("1.2"));    
+        assertEquals(expected, Converter.infixToPostfix(expression));
     }
-
-    /**
-     * Tests the infixToPostfix method with 2 operands and +
-     */
-    @Test
-    public void testInfixToPostfixAdd()
-    {
-        assertEquals("a + b is expected to be a b +", "a b +", Converter.infixToPostfix("a + b"));
-    }
-
-    /**
-     * Tests the infixToPostfix method with 2 operands and -
-     */
-    @Test
-    public void testInfixToPostfixSub()
-    {
-        assertEquals("a - b is expected to be a b -", "a b -", Converter.infixToPostfix("a - b"));
-    }
-
-    /**
-     * Tests the infixToPostfix method with 2 operands and *
-     */
-    @Test
-    public void testInfixToPostfixMult()
-    {
-        assertEquals("a * b is expected to be a b *", "a b *", Converter.infixToPostfix("a * b"));
-    }
-
-    /**
-     * Tests the infixToPostfix method with 2 operands and /
-     */
-    @Test
-    public void testInfixToPostfixDiv()
-    {
-        assertEquals("a / b is expected to be a b /", "a b /", Converter.infixToPostfix("a / b"));
-    }
-    
-    /**
-     * Tests the infixToPostfix method with 4 operands and +'s and -'s in mixed order
-     */
-    @Test
-    public void testInfixToPostfixAddSub()
-    {
-        assertEquals("a + b - c + d is expected to be a b + c - d +", "a b + c - d +",
-                    Converter.infixToPostfix("a + b - c + d"));
-    }
-
-    /**
-     * Tests the infixToPostfix method with 4 operands and *'s and /'s in mixed order
-     */
-    @Test
-    public void testInfixToPostfixMultDiv()
-    {
-        assertEquals("a * b / c * d is expected to be a b * c / d *", "a b * c / d *",
-                    Converter.infixToPostfix("a * b / c * d"));
-    }
-    
-    
-    
-    
-    
-    @Test
-    public void testPostfixValue() 
-    {
-        fail("Not yet implemented");
-    }
-
 }
+
