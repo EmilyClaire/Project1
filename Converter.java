@@ -8,7 +8,7 @@
  */
 
 public class Converter 
-{
+{    
     /**
      * Converts a correctly formatted infix arithmetic expression into postfix notation.
      * 
@@ -17,7 +17,102 @@ public class Converter
      */
     public static String infixToPostfix(String expression)
     {
-        return null;
+        MyStack<String> stack = new MyStack<String>();
+        String[] input = expression.split("\\s+");
+        String output = "";
+        
+        for(int i = 0; i < input.length; i++)
+        {
+            switch (input[i])
+            {
+                case "(": stack.push(input[i]);
+                        break;
+                case "*"://falls through /
+                    
+                case "/": if(stack.isEmpty())
+                          {
+                            stack.push(input[i]);
+                          }
+                          else
+                          {
+                              String[] toCheck = new String[]{"*", "/"};
+                              
+                              if(check(stack, toCheck))
+                              {
+                                  while(!stack.isEmpty() && check(stack, toCheck))
+                                  {
+                                      output += " " + stack.pop();
+                                  }                              
+                              }
+                              
+                              stack.push(input[i]);
+                          }
+                        break;
+                case "+"://falls through to -
+                    
+                case "-": if(stack.isEmpty())
+                          {
+                              stack.push(input[i]);
+                          }
+                          else
+                          {
+                              
+                              String [] toCheck = new String[]{"*", "/", "+", "-"};
+                              
+                              if(check(stack, toCheck))
+                              {
+                                  while(!stack.isEmpty() && check(stack, toCheck))
+                                  {
+                                      output += " " + stack.pop();
+                                  }
+                              }
+                              
+                              stack.push(input[i]);
+                          }
+                        break;
+                case ")":
+                        break;
+                default:    
+                        if(output.equals(""))
+                        {
+                            output += input[i];
+                        }
+                        else
+                        {
+                            output += " " + input[i];
+                        }
+                        break;
+            }//end switch
+        } //end for loop
+        
+        if(output.equals(""))
+        {
+            if(!stack.isEmpty())
+            {
+                if(check(stack, new String[]{"(", ")"}))
+                {
+                    stack.pop();
+                }
+                else
+                {
+                    output += stack.pop();
+                }
+            }
+        }
+        
+        while(!stack.isEmpty())
+        {
+            if(stack.peek().equals("("))
+            {
+                stack.pop();
+            }
+            else
+            {
+                output += " " +  stack.pop();
+            }
+        }
+   
+        return output;
     }
     
     /**
@@ -29,5 +124,20 @@ public class Converter
     public static double postfixValue(String expression)
     {
         return Double.NaN;
+    }
+
+    //Checks to see if any of the items in the array are at the top of the stack
+    //Not sure about javadocs for private methods
+    private static boolean check(MyStack<String> stack, String[] input)
+    {
+        boolean result = false;
+        int i = 0;
+        
+        while(!result && i < input.length)
+        {
+            result = stack.peek().equals(input[i]);
+        }
+        
+        return result;
     }
 }
