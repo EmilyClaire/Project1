@@ -85,29 +85,18 @@ public class Converter
             }//end switch
         } //end for loop
         
-        if(output.equals(""))
-        {
-            if(!stack.isEmpty())
-            {
-                if(check(stack, new String[]{"(", ")"}))
-                {
-                    stack.pop();
-                }
-                else
-                {
-                    output += stack.pop();
-                }
-            }
-        }
-        
         while(!stack.isEmpty())
         {
-            if(stack.peek().equals("("))
+            if(check(stack, new String[]{"(", ")"}))
             {
                 stack.pop();
             }
             else
             {
+                if(output.length() == 0)
+                {
+                    output += " ";
+                }
                 output += " " +  stack.pop();
             }
         }
