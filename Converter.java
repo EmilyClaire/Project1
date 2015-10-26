@@ -45,7 +45,7 @@ public class Converter
                           stack.push(input[i]);
                         break;
                 case "+"://falls through to -
-                    
+                         
                 case "-": if(!stack.isEmpty())
                           {    
                               String [] toCheck = new String[]{"*", "/", "+", "-"};
@@ -63,7 +63,7 @@ public class Converter
                         break;
                 case ")":
                         break;
-                default:    
+                default: 
                         if(output.equals(""))
                         {
                             output += input[i];
@@ -76,9 +76,12 @@ public class Converter
             }//end switch
         } //end for loop
         
+        
         while(!stack.isEmpty())
         {
-            if(check(stack, new String[]{"(", ")"}))
+            String[] toCheck = new String[] {"(", ")"};
+            
+            if(check(stack, toCheck))
             {
                 stack.pop();
             }
@@ -88,7 +91,8 @@ public class Converter
                 {
                     output += " ";
                 }
-                output += " " +  stack.pop();
+                
+                output +=  stack.pop();
             }
         }
    
@@ -116,6 +120,7 @@ public class Converter
         while(!result && i < input.length)
         {
             result = stack.peek().equals(input[i]);
+            i++;
         }
         
         return result;
