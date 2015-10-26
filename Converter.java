@@ -93,7 +93,7 @@ public class Converter
             }
             else
             {
-                if(output.length() == 0)
+                if(output.length() != 0)
                 {
                     output += " ";
                 }
