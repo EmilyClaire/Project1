@@ -61,7 +61,14 @@ public class Converter
                           stack.push(input[i]);
                           
                         break;
-                case ")":
+                case ")": String[] toCheck = {"("};
+                          
+                          while(!stack.isEmpty() && !(check(stack ,toCheck)))
+                          {
+                              output += " " + stack.pop();
+                          }
+                          
+                          stack.pop(); // getting rid of the (
                         break;
                 default: 
                         if(output.equals(""))
@@ -76,7 +83,7 @@ public class Converter
             }//end switch
         } //end for loop
         
-        
+       //Outputs the rest of the stack. 
         while(!stack.isEmpty())
         {
             String[] toCheck = new String[] {"(", ")"};
