@@ -29,11 +29,7 @@ public class Converter
                         break;
                 case "*"://falls through /
                     
-                case "/": if(stack.isEmpty())
-                          {
-                            stack.push(input[i]);
-                          }
-                          else
+                case "/": if(!stack.isEmpty())
                           {
                               String[] toCheck = new String[]{"*", "/"};
                               
@@ -44,19 +40,14 @@ public class Converter
                                       output += " " + stack.pop();
                                   }                              
                               }
-                              
-                              stack.push(input[i]);
                           }
+                          
+                          stack.push(input[i]);
                         break;
                 case "+"://falls through to -
                     
-                case "-": if(stack.isEmpty())
-                          {
-                              stack.push(input[i]);
-                          }
-                          else
-                          {
-                              
+                case "-": if(!stack.isEmpty())
+                          {    
                               String [] toCheck = new String[]{"*", "/", "+", "-"};
                               
                               if(check(stack, toCheck))
@@ -65,10 +56,10 @@ public class Converter
                                   {
                                       output += " " + stack.pop();
                                   }
-                              }
-                              
-                              stack.push(input[i]);
+                              }   
                           }
+                          stack.push(input[i]);
+                          
                         break;
                 case ")":
                         break;
